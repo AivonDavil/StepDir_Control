@@ -21,7 +21,7 @@ void Motor::Run(){ // запуск мотора с прежней скорост
 
 void Motor::Run( int step ){
 
-  this->Change_step(step); // задаем шаг
+  this->Set_step(step); // задаем шаг
 
   this->ON_motor();
 

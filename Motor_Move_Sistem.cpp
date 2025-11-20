@@ -1,23 +1,8 @@
 #include "Motor.h"
 
 void Motor::writeONEstep(){
-
-  if( this->Get_Dir() ){
-    this->MOTOR_ANGLE.angle[this->MOTOR_STEP] +=1;
-  }
-  else{
-    this->MOTOR_ANGLE.angle[this->MOTOR_STEP] -=1;
-  }  
-
-  for( int i = this->MOTOR_STEP; i>0; i-- ){ // приводим наши данные с правильному виду, дабы в долях были числа 
-
-    if( this->MOTOR_ANGLE.angle[i] == 2 )
-    {
-      this->MOTOR_ANGLE.angle[i] = 0;
-      this->MOTOR_ANGLE.angle[i-1] += 1;
-    }
-  }
-
+  float angle = this->MOTOR_FULL_STEP_DEGREES / (1<<MOTOR_STEP);
+  this->MOTOR_ANGLE += angle * MOTOR_DIR;
 }
 
 bool Motor::signalHasChanged(){
@@ -47,15 +32,35 @@ void Motor::runONEstep(){
   this->writeONEstep();
 }
 
+void Motor::runAngle(float angle, MOTOR_STEP_SIZE step, bool is_run){
 
-void runAngle(MotorAngleStruct Mangle){
+  int N = 0;
+  float step_angle = this->MOTOR_FULL_STEP_DEGREES / 1<<step; 
+  this->setStep( step );
 
-  for( int i = 0; i<9; i++ ){
-    int N = Mangle.angle[i];
-    this->MOTOR_STEP = i;
-    this->chuseStep();
-    this->runNsteps(N);
+  N = floor( angle/step_angle );
+  angle -= step_angle * N;
 
+  this->runNsteps(N);  
+
+  if( !is_run || angle == 0 || step==8 ){
+    return;
   }
+
+  this->runAngle( angle, step+1, true );
 }
 
+
+float Motor::checkAngleSetDir(float angle){
+
+  if( angle<0 ){
+    this-> Set_dir( false );
+    angle *= -1;
+  }
+  else{
+    this->Set_dir( true );
+  }
+
+  return angle;
+
+}

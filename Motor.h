@@ -63,6 +63,7 @@ class Motor{
     void runNsteps(int N);
     void runAngle(float angle, MOTOR_STEP_SIZE step, bool is run);
     float checkAngleSetDir(float angle);
+    float getAngleToCirclePosition( float angle );
     void writeONEstep();
 
     void setStepPin(int steppin);

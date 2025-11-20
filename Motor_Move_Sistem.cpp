@@ -64,3 +64,15 @@ float Motor::checkAngleSetDir(float angle){
   return angle;
 
 }
+
+float Motor::getAngleToCirclePosition( float angle ){
+
+  float motor_angle = this->MOTOR_ANGLE;
+  int N = floor(motor_angle / 360);
+  motor_angle = motor_angle - 360*N
+
+  angle = angle - motor_angle;
+  return angle;
+
+}
+

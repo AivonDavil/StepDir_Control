@@ -9,7 +9,7 @@ void setup() {
   Serial.begin(9600);
 
 
-  m1.Setup(41, 43, 31, 35, 37);
+  m1.Setup_StepDir(41, 43, 31, 35, 37);
   
 }
 

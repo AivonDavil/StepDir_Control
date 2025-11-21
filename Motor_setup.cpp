@@ -7,7 +7,7 @@ Motor::Motor(){
 Motor::~Motor(){
 }
 
-void Motor::Setup(int step_pin, int dir_pin, int en_pin, int ms1_pin, int ms2_pin){
+void Motor::Setup_StepDir(int step_pin, int dir_pin, int en_pin, int ms1_pin, int ms2_pin){
 
   this->STEP_PIN = step_pin;
   this->DIR_PIN = dir_pin;
@@ -29,6 +29,60 @@ void Motor::Setup(int step_pin, int dir_pin, int en_pin, int ms1_pin, int ms2_pi
 
 }
 
+// все настройки базовые, для тонких нужно настраивать мотор отдельно 
+void Motor::Setup_UART( int step_pin, int dir_pin, int en_pin, int Arduino_serial_number){
+
+  this->STEP_PIN = step_pin;
+  this->DIR_PIN = dir_pin;
+  this->EN_PIN = en_pin;
+
+  HardwareSerial& SerialPort; 
+  TMC2209Stepper driver;
+
+
+  pinMode( this->STEP_PIN, OUTPUT );
+  pinMode( this->DIR_PIN, OUTPUT );
+  pinMode( this->EN_PIN, OUTPUT );
+
+  digitalWrite( STEP_PIN, LOW );
+  digitalWrite( DIR_PIN, HIGH );
+  digitalWrite( EN_PIN, HIGH );
+
+
+
+  switch (Arduino_serial_number)
+  {
+  case 0:
+    SerialPort = Serial;
+    break;
+  case 1:
+    SerialPort = Serial1;
+    break;
+  case 2:
+    SerialPort = Serial2;
+    break;
+  case 3:
+    SerialPort = Serial3;
+    break;
+  
+  default:
+    break;
+  }
+
+  driver(&SerialPort, R_SENSE, DRIVER_ADDRESS);
+
+  SerialPort.begin(115200);      
+  driver.begin();
+
+  driver.toff(5);                  
+  driver.rms_current(MOTOR_CURRENT); // Установка тока
+  driver.pwm_autoscale(true);      
+  driver.en_spreadCycle(false);    // StealthChop режим работы 
+
+
+}
+
+
 void Motor::ON_motor(){
   digitalWrite(this->EN_PIN, LOW);
 }
@@ -48,15 +102,11 @@ void Motor::Setup_motor_test(){
   digitalWrite( EN_PIN, HIGH );
 }
 
-void Motor::Set_step( int step ){
-  
-  for( int i = 0; i<9; i++ ){
-    if( step == 1<<i ){
-      MOTOR_STEP = i;
-      break;
-    }
-  }
-  this->chuseStep();
+void Motor::Set_step( MOTOR_STEP_SIZE step ){
+
+  int Step = 1<<int(step);
+
+  this->chuseStep(int( Step ));
 }
 
 void Motor::Change_dir(){

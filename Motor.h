@@ -4,48 +4,46 @@
 #include "settings.h"
 
 
-
-// 1.8 градуса это на пару хай-лоу или только на один сигнал? 
-
 class Motor{
   public:
-
     Motor();
     ~Motor();
+  
+  public:
+    void Setup_StepDir(int step_pin, int dir_pin, int en_pin, int ms1_pin, int ms2_pin); // готово
+    void Setup_UART( int step_pin, int dir_pin, int en_pin, int Arduino_serial_number ); // протестить, в частности создание экземпляра драйвера
+    void Setup_motor_test(); // ДОРАБОТАТЬ 
+    void Set_dir( bool dir ); // готово
 
-    void Setup(int step_pin, int dir_pin, int en_pin, int ms1_pin, int ms2_pin); //
-    void Setup_motor_test(); //
-    void Set_dir( bool dir );
+    void Change_dir();// готово
 
-    void Change_dir();//
+    void ON_motor();  // готово
+    void OFF_motor(); // готово
 
-    void ON_motor();
-    void OFF_motor();
+    void Run_N_steps(int N); // готово
+    void Run(); // готово 
+    void Run( int step ); // готово
+    void Run( int step, int step_time ); /// РЕАЛИЗОВАТЬ
 
-    void Run_N_steps(int N);
-    void Run();
-    void Run( int step );
-    void Run( int step, int step_time ); /// реализовать 
+    void Run_angle(float angle); // готово
+    void Run_to_angle( float angle ); // готово
+    void Run_to_angle_of_circle(float angle); // готово
 
-    // ДОРАБОТАТЬ
-    void Run_angle(float angle);
-    void Run_to_angle( float angle );
-    void Run_to_angle_of_circle(float angle);
+    void Run_time(unsigned long time_to_run_ms); // готово
+    void Run_revolutions_per_minute( int rev_p_m, int step ); // РЕАЛИЗОВАТЬ
 
-    void Run_time(unsigned long time_to_run_ms);//
-    void Run_revolutions_per_minute( int rev_p_m, int step );
-
-    void Set_step(int step);//
+    void Set_step(MOTOR_STEP_SIZE step); // готово
     void Set_half_step_time(int step_time);// ДОРАБОТАТЬ
-    void Set_motor_operating_frequency_per_second( int frequency ); // частота изменения сигнала в секунду
-    int Get_Step_Pin();
-    int Get_Dir_Pin();
-    int Get_En_Pin();
-    int Get_Ms1_Pin();
-    int Get_Ms2_Pin();
+    void Set_motor_operating_frequency_per_second( int frequency ); // ДОРАБОТАТЬ 
 
-    float Get_Angle();
-    bool Get_Dir();
+    int Get_Step_Pin(); // ДОРАБОТАТЬ
+    int Get_Dir_Pin(); // ДОРАБОТАТЬ
+    int Get_En_Pin(); // ДОРАБОТАТЬ
+    int Get_Ms1_Pin(); // ДОРАБОТАТЬ
+    int Get_Ms2_Pin(); // ДОРАБОТАТЬ
+
+    float Get_Angle(); // РЕАЛИЗОВАТЬ
+    bool Get_Dir(); // готово
 
 
   private:
@@ -59,27 +57,26 @@ class Motor{
     int MOTOR_SIGNAL = 0b0; // сигнал, выполняющийся мотором в данный момент возможно стоит сделать стек, для последовательного выполнения нескольких команд. например для проведения теста. хорошая идея 
     int SERIAL_SIGNAL = 0b0; // настоящий сигнал с порта 
 
-    void runONEstep();
-    void runNsteps(int N);
-    void runAngle(float angle, MOTOR_STEP_SIZE step, bool is_run);
-    float checkAngleSetDir(float angle);
-    float getAngleToCirclePosition( float angle );
-    void writeONEstep();
+    TMC2209Stepper* MOTOR_DRIVER; // РЕАЛИЗОВАТЬ  
 
-    void setStepPin(int steppin);
-    void setDirPin(int dirpin);
-    void setEnPin(int enpin);
-    void setMS1Pin(int ms1pin);
-    void setMS2Pin(int ms2pin);
+    void runONEstep(); // готово 
+    void runNsteps(int N); // готово
+    void runAngle(float angle, MOTOR_STEP_SIZE step, bool is_run); // ДОРАБОТАТЬ протестировать. необходимо добавить сохранение ошибки  
+    float checkAngleSetDir(float angle);  // готово
+    float getAngleToCirclePosition( float angle );  // готово
+    void writeONEstep();  // готово
 
-    void setStep(MOTOR_STEP_SIZE step);
-    void chuseStep();
-    void writeMS1MS2(int MS1, int MS2);
+    void setStepPin(int steppin);  //  РЕАЛИЗОВАТЬ
+    void setDirPin(int dirpin);  //  РЕАЛИЗОВАТЬ
+    void setEnPin(int enpin);  //  РЕАЛИЗОВАТЬ
+    void setMS1Pin(int ms1pin);  //  РЕАЛИЗОВАТЬ
+    void setMS2Pin(int ms2pin);  //  РЕАЛИЗОВАТЬ
 
-    // void Chusestep_time();
-    
+    void chuseStep(int step); // готово
+    void writeMS1MS2(int MS1, int MS2); // реализовать на случай подключения в режиме step/dir
+
     // функция проверки изменения сигнала для прерывания выполнения функций движения
-    bool signalHasChanged();  
+    bool signalHasChanged();  // ПЕРЕДЕЛАТЬ ПОД НОВУЮ АРХИТЕКТУРУ! 
 
 };
 

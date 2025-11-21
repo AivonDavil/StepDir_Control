@@ -20,11 +20,9 @@ void Motor::runNsteps(int N){
     this->runONEstep();
     i+=1;
   }
-  
 }
 
 void Motor::runONEstep(){
-  // выплоняем два шага с записью
   digitalWrite( STEP_PIN, HIGH ); 
   delayMicroseconds(MOTOR_HALF_STEP_TIME);
   digitalWrite( STEP_PIN, LOW );
@@ -33,10 +31,10 @@ void Motor::runONEstep(){
 }
 
 void Motor::runAngle(float angle, MOTOR_STEP_SIZE step, bool is_run){
-
+  // рекурсивная функция вычисления и движения на угол
   int N = 0;
   float step_angle = this->MOTOR_FULL_STEP_DEGREES / (1<<step); 
-  this->setStep( step );
+  this->chuseStep(step);
 
   N = floor( angle/step_angle );
   angle -= step_angle * N;

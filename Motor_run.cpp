@@ -1,4 +1,3 @@
-#include "Arduino.h"
 #include "Motor.h"
 
 void Motor::Run_N_steps(int N){

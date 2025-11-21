@@ -2,7 +2,6 @@
 
 bool Motor::Get_Dir(){
   digitalRead( this->DIR_PIN );
-  
 }
 
 void Motor::Set_dir(bool dir){
@@ -16,7 +15,7 @@ void Motor::Set_dir(bool dir){
 
 }
 
-
+/// ДОРАБОТАТЬ!
 void Motor::Set_motor_operating_frequency_per_second( int frequency ){
 
   float T = 1/frequency;

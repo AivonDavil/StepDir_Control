@@ -64,11 +64,11 @@ void Motor::Change_dir(){
   this->Set_dir(! digitalRead( this->DIR_PIN ));
 }
 
-void Motor::Set_step_time(int step_time){
+void Motor::Set_half_step_time(int step_time){
   step_time = constrain(step_time, 1, 1000);
 
   // this->Chusestep_time();
-  MOTOR_STEP_TIME_MKS = step_time;
+  MOTOR_HALF_STEP_TIME = step_time;
 
 
 }

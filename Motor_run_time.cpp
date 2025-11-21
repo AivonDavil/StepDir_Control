@@ -14,3 +14,9 @@ void Motor::Run_time(unsigned long time_to_run_ms){
     }
     this->OFF_motor();
 }
+
+void Motor::Run_revolutions_per_minute( int rev_p_m, int step ){
+
+    
+
+}

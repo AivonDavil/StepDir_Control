@@ -26,16 +26,16 @@ void Motor::runNsteps(int N){
 void Motor::runONEstep(){
   // выплоняем два шага с записью
   digitalWrite( STEP_PIN, HIGH ); 
-  delayMicroseconds(MOTOR_STEP_TIME_MKS);
+  delayMicroseconds(MOTOR_HALF_STEP_TIME);
   digitalWrite( STEP_PIN, LOW );
-  delayMicroseconds(MOTOR_STEP_TIME_MKS);
+  delayMicroseconds(MOTOR_HALF_STEP_TIME);
   this->writeONEstep();
 }
 
 void Motor::runAngle(float angle, MOTOR_STEP_SIZE step, bool is_run){
 
   int N = 0;
-  float step_angle = this->MOTOR_FULL_STEP_DEGREES / 1<<step; 
+  float step_angle = this->MOTOR_FULL_STEP_DEGREES / (1<<step); 
   this->setStep( step );
 
   N = floor( angle/step_angle );
@@ -69,7 +69,7 @@ float Motor::getAngleToCirclePosition( float angle ){
 
   float motor_angle = this->MOTOR_ANGLE;
   int N = floor(motor_angle / 360);
-  motor_angle = motor_angle - 360*N
+  motor_angle = motor_angle - 360*N;
 
   angle = angle - motor_angle;
   return angle;

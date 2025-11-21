@@ -2,7 +2,7 @@
 #define MOTORLIB_H
 
 #include "settings.h"
-#include "Mangle.h"
+
 
 
 // 1.8 градуса это на пару хай-лоу или только на один сигнал? 
@@ -33,11 +33,11 @@ class Motor{
     void Run_to_angle_of_circle(float angle);
 
     void Run_time(unsigned long time_to_run_ms);//
-
     void Run_revolutions_per_minute( int rev_p_m, int step );
 
     void Set_step(int step);//
-    void Set_step_time(int step_time);// ДОРАБОТАТЬ
+    void Set_half_step_time(int step_time);// ДОРАБОТАТЬ
+    void Set_motor_operating_frequency_per_second( int frequency ); // частота изменения сигнала в секунду
     int Get_Step_Pin();
     int Get_Dir_Pin();
     int Get_En_Pin();
@@ -51,7 +51,7 @@ class Motor{
   private:
     int STEP_PIN, DIR_PIN, EN_PIN, MS1_PIN, MS2_PIN;
     MOTOR_STEP_SIZE MOTOR_STEP = STEP_64; // выбираем первоначальный шаг
-    int MOTOR_STEP_TIME_MKS = 100; // выбираем задержку между микрошагами в мк_с
+    int MOTOR_HALF_STEP_TIME = 100; // выбираем задержку между микрошагами в мк_с
     float MOTOR_FULL_STEP_DEGREES = 1.8; // полный шаг в градусах 
     float MOTOR_ANGLE;
     int MOTOR_DIR = 1;
@@ -61,7 +61,7 @@ class Motor{
 
     void runONEstep();
     void runNsteps(int N);
-    void runAngle(float angle, MOTOR_STEP_SIZE step, bool is run);
+    void runAngle(float angle, MOTOR_STEP_SIZE step, bool is_run);
     float checkAngleSetDir(float angle);
     float getAngleToCirclePosition( float angle );
     void writeONEstep();

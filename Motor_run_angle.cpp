@@ -11,7 +11,7 @@ void Motor::Run_angle( float angle ){
   angle = this->checkAngleSetDir(angle);
 
   this->ON_motor();
-  this->runAngle(angle);
+  this->runAngle(angle, 1, true);
   this->OFF_motor();
 }
 
@@ -22,7 +22,7 @@ void Motor::Run_to_angle( float angle ){
   angle = this->checkAngleSetDir(angle);
 
   this->ON_motor();
-  this->runAngle(angle);
+  this->runAngle(angle, 1, true);
   this->OFF_motor();
 
 }
@@ -34,6 +34,6 @@ void Motor::Run_to_angle_of_circle(float angle){
   // добавить определение угла для поворота 
 
   this->ON_motor();
-  this->runAngle(angle);
+  this->runAngle(angle, 1, true);
   this->OFF_motor();
 }

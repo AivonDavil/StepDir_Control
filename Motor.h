@@ -12,19 +12,25 @@ class Motor{
   public:
     void Setup_StepDir(int step_pin, int dir_pin, int en_pin, int ms1_pin, int ms2_pin); // готово
     void Setup_UART( int step_pin, int dir_pin, int en_pin, int Arduino_serial_number ); // протестить, в частности создание экземпляра драйвера
+    void Init_Driver( int Serial_Port_Number, MOTOR_DRIVER_ADRES DRIVER_ADRES = DEFAULT_MOTOR_DRIVER_ADDRESS ); // готово
+    void Setup_Driver( int current = DEFAULT_MOTOR_CURRENT, MOTOR_STEP_SIZE step = DEFAULT_MOTOR_STEP, bool noisy_but_powerful = false); // готово
     void Setup_motor_test(); // ДОРАБОТАТЬ 
+
+  public:
     void Set_dir( bool dir ); // готово
-
     void Change_dir();// готово
-
     void ON_motor();  // готово
     void OFF_motor(); // готово
-
+    void Set_step(MOTOR_STEP_SIZE step); // готово
+    void Set_half_step_time(int step_time);// ДОРАБОТАТЬ
+    void Set_motor_operating_frequency_per_second( int frequency ); // ДОРАБОТАТЬ 
+  
+  public:
     void Run_N_steps(int N); // готово
     void Run(); // готово 
     void Run( int step ); // готово
     void Run( int step, int step_time ); /// РЕАЛИЗОВАТЬ
-
+  
     void Run_angle(float angle); // готово
     void Run_to_angle( float angle ); // готово
     void Run_to_angle_of_circle(float angle); // готово
@@ -32,10 +38,7 @@ class Motor{
     void Run_time(unsigned long time_to_run_ms); // готово
     void Run_revolutions_per_minute( int rev_p_m, int step ); // РЕАЛИЗОВАТЬ
 
-    void Set_step(MOTOR_STEP_SIZE step); // готово
-    void Set_half_step_time(int step_time);// ДОРАБОТАТЬ
-    void Set_motor_operating_frequency_per_second( int frequency ); // ДОРАБОТАТЬ 
-
+  public:
     int Get_Step_Pin(); // ДОРАБОТАТЬ
     int Get_Dir_Pin(); // ДОРАБОТАТЬ
     int Get_En_Pin(); // ДОРАБОТАТЬ
@@ -57,7 +60,8 @@ class Motor{
     int MOTOR_SIGNAL = 0b0; // сигнал, выполняющийся мотором в данный момент возможно стоит сделать стек, для последовательного выполнения нескольких команд. например для проведения теста. хорошая идея 
     int SERIAL_SIGNAL = 0b0; // настоящий сигнал с порта 
 
-    TMC2209Stepper* MOTOR_DRIVER; // РЕАЛИЗОВАТЬ  
+    TMC2209Stepper MOTOR_DRIVER; // РЕАЛИЗОВАТЬ  
+    HardwareSerial& MOTOR_SERIAL_PORT;
 
     void runONEstep(); // готово 
     void runNsteps(int N); // готово
@@ -70,13 +74,16 @@ class Motor{
     void setDirPin(int dirpin);  //  РЕАЛИЗОВАТЬ
     void setEnPin(int enpin);  //  РЕАЛИЗОВАТЬ
     void setMS1Pin(int ms1pin);  //  РЕАЛИЗОВАТЬ
-    void setMS2Pin(int ms2pin);  //  РЕАЛИЗОВАТЬ
+    void setMS2Pin(int ms2pin);  //  РЕАЛИЗОВАТЬ 
 
-    void chuseStep(int step); // готово
+    void chooseStep(int step); // готово
     void writeMS1MS2(int MS1, int MS2); // реализовать на случай подключения в режиме step/dir
 
     // функция проверки изменения сигнала для прерывания выполнения функций движения
     bool signalHasChanged();  // ПЕРЕДЕЛАТЬ ПОД НОВУЮ АРХИТЕКТУРУ! 
+
+    void chooseSerialPort( int Serial_Port_Number );
+    
 
 };
 

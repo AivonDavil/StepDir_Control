@@ -34,7 +34,7 @@ void Motor::runAngle(float angle, MOTOR_STEP_SIZE step, bool is_run){
   // рекурсивная функция вычисления и движения на угол
   int N = 0;
   float step_angle = this->MOTOR_FULL_STEP_DEGREES / (1<<step); 
-  this->chuseStep(step);
+  this->chooseStep(step);
 
   N = floor( angle/step_angle );
   angle -= step_angle * N;

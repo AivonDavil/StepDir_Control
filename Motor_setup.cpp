@@ -26,7 +26,6 @@ void Motor::Setup_StepDir(int step_pin, int dir_pin, int en_pin, int ms1_pin, in
   digitalWrite( STEP_PIN, LOW );
   digitalWrite( DIR_PIN, HIGH );
   digitalWrite( EN_PIN, HIGH );
-
 }
 
 // все настройки базовые, для тонких нужно настраивать мотор отдельно 
@@ -35,8 +34,7 @@ void Motor::Setup_UART( int step_pin, int dir_pin, int en_pin, int Arduino_seria
   this->STEP_PIN = step_pin;
   this->DIR_PIN = dir_pin;
   this->EN_PIN = en_pin;
-
-  HardwareSerial& SerialPort; 
+ 
   TMC2209Stepper driver;
 
 
@@ -48,28 +46,7 @@ void Motor::Setup_UART( int step_pin, int dir_pin, int en_pin, int Arduino_seria
   digitalWrite( DIR_PIN, HIGH );
   digitalWrite( EN_PIN, HIGH );
 
-
-
-  switch (Arduino_serial_number)
-  {
-  case 0:
-    SerialPort = Serial;
-    break;
-  case 1:
-    SerialPort = Serial1;
-    break;
-  case 2:
-    SerialPort = Serial2;
-    break;
-  case 3:
-    SerialPort = Serial3;
-    break;
-  
-  default:
-    break;
-  }
-
-  driver(&SerialPort, R_SENSE, DRIVER_ADDRESS);
+  this->initDriver( Arduino_serial_number );
 
   SerialPort.begin(115200);      
   driver.begin();
@@ -103,10 +80,10 @@ void Motor::Setup_motor_test(){
 }
 
 void Motor::Set_step( MOTOR_STEP_SIZE step ){
-
+  this->MOTOR_STEP = step;
   int Step = 1<<int(step);
-
-  this->chuseStep(int( Step ));
+  
+  this->chooseStep(int( Step ));
 }
 
 void Motor::Change_dir(){
@@ -117,8 +94,40 @@ void Motor::Change_dir(){
 void Motor::Set_half_step_time(int step_time){
   step_time = constrain(step_time, 1, 1000);
 
-  // this->Chusestep_time();
+  // this->Choosestep_time();
   MOTOR_HALF_STEP_TIME = step_time;
 
 
 }
+
+
+void Motor::Init_Driver(int Serial_Port_Number, MOTOR_DRIVER_ADRES DRIVER_ADRES = DEFAULT_MOTOR_DRIVER_ADDRESS)
+{
+  this->chooseSerialPort( Serial_Port_Number );
+  this->MOTOR_DRIVER( &(this->MOTOR_SERIAL_PORT), R_SENSE, DRIVER_ADRES );
+
+}
+
+
+
+void Motor::Setup_Driver(int current = DEFAULT_MOTOR_CURRENT, MOTOR_STEP_SIZE step = DEFAULT_MOTOR_STEP, bool noisy_but_powerful = false )
+{
+  this->MOTOR_DRIVER.toff(5);                  
+  this->MOTOR_DRIVER.rms_current(current); // Установка тока
+  // driver.microsteps(MICROSTEPS);   // Установка микрошага 1/2
+  this->Set_step(step)
+  this->MOTOR_DRIVER.pwm_autoscale(true); // поддерживает нужный уровень тока в катушках
+  this->MOTOR_DRIVER.en_spreadCycle(noisy_but_powerful);    // StealthChop
+
+  /*
+  SpreadCycle — высокопроизводительный режим, который обеспечивает быстрый отклик и подходит для приложений,
+  требующих высокого крутящего момента или быстрых движений. В этом режиме двигатель управляется более агрессивно,
+  но при этом повышается уровень шума. SpreadCycle идеален для быстрых перемещений или тяжёлых механических нагрузок.
+  StealthChop — режим бесшумной работы, который значительно снижает шум шагового двигателя. Он особенно полезен в 
+  3D-принтерах, оборудовании для камер и других условиях, где нежелателен шум. StealthChop лучше всего работает на 
+  низких и средних скоростях, обеспечивая плавное и тихое движение.
+  Таким образом, SpreadCycle предпочтительнее для быстрых движений и высоких нагрузок, а StealthChop — для тихой и 
+  плавной работы на низких скоростях
+  */
+}
+

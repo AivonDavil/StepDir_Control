@@ -34,9 +34,6 @@ void Motor::Setup_UART( int step_pin, int dir_pin, int en_pin, int Arduino_seria
   this->STEP_PIN = step_pin;
   this->DIR_PIN = dir_pin;
   this->EN_PIN = en_pin;
- 
-  TMC2209Stepper driver;
-
 
   pinMode( this->STEP_PIN, OUTPUT );
   pinMode( this->DIR_PIN, OUTPUT );
@@ -46,16 +43,8 @@ void Motor::Setup_UART( int step_pin, int dir_pin, int en_pin, int Arduino_seria
   digitalWrite( DIR_PIN, HIGH );
   digitalWrite( EN_PIN, HIGH );
 
-  this->initDriver( Arduino_serial_number );
-
-  SerialPort.begin(115200);      
-  driver.begin();
-
-  driver.toff(5);                  
-  driver.rms_current(MOTOR_CURRENT); // Установка тока
-  driver.pwm_autoscale(true);      
-  driver.en_spreadCycle(false);    // StealthChop режим работы 
-
+  this->Init_Driver( Arduino_serial_number );
+  this->Setup_Driver();
 
 }
 
@@ -81,23 +70,21 @@ void Motor::Setup_motor_test(){
 
 void Motor::Set_step( MOTOR_STEP_SIZE step ){
   this->MOTOR_STEP = step;
+
   int Step = 1<<int(step);
-  
   this->chooseStep(int( Step ));
 }
 
 void Motor::Change_dir(){
-  digitalWrite( this->DIR_PIN, !( digitalRead( this->DIR_PIN ) ) );
-  this->Set_dir(! digitalRead( this->DIR_PIN ));
+  bool dir = !( digitalRead( this->DIR_PIN ) )
+
+  digitalWrite( this->DIR_PIN, dir );
+  this->Set_dir(dir);
 }
 
-void Motor::Set_half_step_time(int step_time){
-  step_time = constrain(step_time, 1, 1000);
+void Motor::Set_half_step_time(int half_step_time){
 
-  // this->Choosestep_time();
-  MOTOR_HALF_STEP_TIME = step_time;
-
-
+  setHalfStepTime(half_step_time);
 }
 
 

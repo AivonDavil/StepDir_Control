@@ -17,9 +17,8 @@ void Motor::Set_dir(bool dir){
 
 /// ДОРАБОТАТЬ!
 void Motor::Set_motor_operating_frequency_per_second( int frequency ){
-
   float T = 1/frequency;
-  T = constrain(T, 1000000,2000000 );
-  this->MOTOR_HALF_STEP_TIME = T;
+  T *= 500000;
 
+  setHalfStepTime( T );
 }

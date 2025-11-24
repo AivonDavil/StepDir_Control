@@ -5,7 +5,7 @@
 void Motor::writeMS1MS2(int MS1, int MS2){
   digitalWrite(MS1_PIN, MS1);
   digitalWrite(MS2_PIN, MS2);
-}
+} // ! функционал вырезан!
 
 void Motor::chooseStep(int step){
     this->driver.microsteps( step );
@@ -34,3 +34,9 @@ void Motor::chooseSerialPort(int Serial_Port_Number)
 
 }
 
+void Motor::setHalfStepTime(int T){
+  if( T < 70 ){
+    T=70;
+  }
+  this->MOTOR_HALF_STEP_TIME = T;
+}

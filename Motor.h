@@ -10,11 +10,11 @@ class Motor{
     ~Motor();
   
   public:
-    void Setup_StepDir(int step_pin, int dir_pin, int en_pin, int ms1_pin, int ms2_pin); // готово
+    void Setup_StepDir(int step_pin, int dir_pin, int en_pin, int ms1_pin, int ms2_pin); // ! реализация функционала вырезана 
     void Setup_UART( int step_pin, int dir_pin, int en_pin, int Arduino_serial_number ); // протестить, в частности создание экземпляра драйвера
     void Init_Driver( int Serial_Port_Number, MOTOR_DRIVER_ADRES DRIVER_ADRES = DEFAULT_MOTOR_DRIVER_ADDRESS ); // готово
     void Setup_Driver( int current = DEFAULT_MOTOR_CURRENT, MOTOR_STEP_SIZE step = DEFAULT_MOTOR_STEP, bool noisy_but_powerful = false); // готово
-    void Setup_motor_test(); // ДОРАБОТАТЬ 
+    void Setup_motor_test(); // готово 
 
   public:
     void Set_dir( bool dir ); // готово
@@ -22,9 +22,9 @@ class Motor{
     void ON_motor();  // готово
     void OFF_motor(); // готово
     void Set_step(MOTOR_STEP_SIZE step); // готово
-    void Set_half_step_time(int step_time);// ДОРАБОТАТЬ
-    void Set_motor_operating_frequency_per_second( int frequency ); // ДОРАБОТАТЬ 
-  
+    void Set_half_step_time(int step_time);// готово
+    void Set_motor_operating_frequency_per_second( int frequency ); // готово 
+   
   public:
     void Run_N_steps(int N); // готово
     void Run(); // готово 
@@ -44,7 +44,6 @@ class Motor{
     int Get_En_Pin(); // ДОРАБОТАТЬ
     int Get_Ms1_Pin(); // ДОРАБОТАТЬ
     int Get_Ms2_Pin(); // ДОРАБОТАТЬ
-
     float Get_Angle(); // РЕАЛИЗОВАТЬ
     bool Get_Dir(); // готово
 
@@ -83,6 +82,8 @@ class Motor{
     bool signalHasChanged();  // ПЕРЕДЕЛАТЬ ПОД НОВУЮ АРХИТЕКТУРУ! 
 
     void chooseSerialPort( int Serial_Port_Number );
+
+    void setHalfStepTime(int time); // готово
     
 
 };
